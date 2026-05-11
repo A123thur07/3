@@ -26,7 +26,7 @@ const Estilos = StyleSheet.create({
         flex: 1,
         paddingHorizontal: 20,
     },
-    InputContainer: {
+    inputContainer: {
         flexDirection: 'row',
         marginBottom: 20,
     },

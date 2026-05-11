@@ -1,70 +1,75 @@
-import React from 'react';
+import { useState, useEffect } from 'react'
+import { Text, View, TextInput, TouchableOpacity, FlatList, Image, StatusBar } from 'react-native'
+import Estilos, { corPrincipal, corSecundaria, corTextos, corFundo, corFundo2, corPlaceholder } from '../styles/Estilos'
+import { MaterialIcons } from '@expo/vector-icons'
+import { firestore } from './firebase.config'
 import {
-    View,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    FlatList,
-    Image,
-    StatusBar
-} from 'react-native';
-import Estilos, {
-    corPrincipal,
-    corSecundaria,
-    corTexto,
-    corFundo,
-    corFundo2,
-    corPlaceholder
-} from '../styles/Estilos';
-import { MaterialIcons } from '@expo/vector-icons';
+    collection, addDoc, getDocs, query, doc, updateDoc, deleteDoc,
+    where, orderBy
+} from 'firebase/firestore'
 
 const ListaCompras = () => {
-    //variável de estado para armazenar o item a ser adicionado à lista de compras
-    const [item, setItem] = React.useState('');
-    const [listaCompras, setListaCompras] = React.useState([
-        { id: 1, produto: 'Arroz 🍚', comprado: false },
-        { id: 2, produto: 'Feijão 🫘', comprado: true },
-        { id: 3, produto: 'Macarrão 🍝', comprado: false },
-    ]);
-    //função para desenhar os itens na lista
-    const exibirItens = ({ item }) => (
-        <TouchableOpacity style={Estilos.botaoItem} onPress={() => {
-            const novaLista = listaCompras.map((produto) => {
-                if (produto.id === item.id) {
-                    return { ...produto, comprado: !produto.comprado };
-                }
-                return produto;
-            });
-            setListaCompras(novaLista);
-        }}>
-            <Text style={item.comprado ? Estilos.textoBotaoItemComprado : Estilos.textoBotaoItem}>
-                {item.produto}
-            </Text>
-            <MaterialIcons
-                onPress={() => {
-                    const novaLista = listaCompras.filter((produto) => produto.id !== item.id);
-                    setListaCompras(novaLista);
-                }}
-                name='delete-outline'
-                size={24}
-                color={corPrincipal}
-            />
-        </TouchableOpacity>
-    );
+    // Variável de estado para o item que irei incluir na lista
+    const [item, setItem] = useState('')
+    const [listaCompras, setListaCompras] = useState([])
 
-    //função para adicionar um item à lista de compras
-    const adicionarItem = () => {
-        if (item.trim() === '') {
-            return;
-        }
+    async function buscarDados() {
+        //Representa um SELECT * FROM COMPRAS
+        const comando = query(collection(firestore, 'lista_compras_arthur'))
+        const dadosBD = await getDocs(comando)
+
+        const novaLista = dadosBD.docs.map((doc) => ({
+            ...doc.data(),
+            id: doc.id
+        }))
+
+        setListaCompras(novaLista)
+    }
+
+    useEffect(() => {
+        buscarDados()
+    }, [])
+
+    async function botaoExcluir(id) {
+        await deleteDoc(doc(firestore, 'lista_compras_arthur', id))
+        buscarDados()
+    }
+
+    async function botaoAtualizar(item) {
+        const docRef = doc(firestore, 'lista_compras_arthur', item.id)
+        await updateDoc(docRef, {
+            comprado: !item.comprado
+        })
+        buscarDados()
+    }
+
+    //Função para desenhar os itens na lista
+    const exibirItens = ({ item }) => {
+        return (
+            <TouchableOpacity onPress={() => botaoAtualizar(item)} style={Estilos.botaoItem} >
+
+                <Text style={item.comprado ? Estilos.textoBotaoItemComprado : Estilos.textoBotaoItem}>
+                    {item.produto}
+                </Text>
+                <MaterialIcons name='delete-outline' size={24} color={corPrincipal} onPress={() => botaoExcluir(item.id)} />
+            </TouchableOpacity>
+        )
+    }
+
+    const adicionarItem = async () => {
+
         const novoItem = {
-            id: Date.now(),
             produto: item,
             comprado: false
         };
-        setListaCompras([...listaCompras, novoItem]);
+        const docRef = await addDoc(collection(firestore, 'lista_compras_arthur'), novoItem);
+        console.log('Documento adicionado com ID: ', docRef.id);
         setItem('');
+        await buscarDados();
     };
+
+
+
 
     return (
         <View style={Estilos.conteudo}>
@@ -79,7 +84,7 @@ const ListaCompras = () => {
             </View>
 
             <View style={Estilos.corpo}>
-                <View style={Estilos.InputContainer}>
+                <View style={Estilos.inputContainer}>
                     <TextInput
                         placeholder="Digite o item a ser adicionado"
                         value={item}

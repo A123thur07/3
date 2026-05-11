@@ -1,4 +1,4 @@
-import ListaCompras from './src/components/ListaCompras';
+import ListaCompras from "./src/components/ListaCompras";
 
 function App() {
   return (

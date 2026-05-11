@@ -6,10 +6,10 @@ import { Aula03_Exercicio2 } from './Aula03_Exercicio 2'
 const Aula03 = () => {
     //Definindo um vetor de turmas como fonte de dados para lista
     const turmas = [
-        { id: 1, turma: '3º A', pg: 10 },
-        { id: 2, turma: '3º B', pg: 8 },
-        { id: 3, turma: '2º A', pg: 6 },
-        { id: 4, turma: '2º B', pg: 2 },
+        { id: 1, turma: '3º A', pontos: 10 },
+        { id: 2, turma: '3º B', pontos: 8 },
+        { id: 3, turma: '2º A', pontos: 6 },
+        { id: 4, turma: '2º B', pontos: 2 },
     ]
 
     // function exibirItensLista =( {item} ) => (

@@ -4,10 +4,10 @@ import Hr from './Hr'
 export const Aula03_Exercicio = () => {
     //Definindo um vetor de turmas como fonte de dados para lista
     const alunos = [
-        { id: 1, aluno: 'João', materia: 'Matemática', média: 10, faltas: 0 },
-        { id: 2, aluno: 'Maria', materia: 'Português', média: 8, faltas: 2 },
-        { id: 3, aluno: 'Pedro', materia: 'História', média: 6, faltas: 5 },
-        { id: 4, aluno: 'Ana', materia: 'Geografia', média: 2, faltas: 8 },
+        { id: 1, aluno: 'LUIZ RIBEIRO', materia: 'Matemática', média: 10, faltas: 0 },
+        { id: 2, aluno: 'FELIPE VIANA', materia: 'Português', média: 8, faltas: 2 },
+        { id: 3, aluno: 'PABLO FERREIRA', materia: 'História', média: 6, faltas: 5 },
+        { id: 4, aluno: 'BOLDORINI CALDAS', materia: 'Geografia', média: 2, faltas: 8 },
     ]
     const exibirItensListaAlunos = ({ item }) => (
         <View style={
