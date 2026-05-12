@@ -3,13 +3,18 @@ import { useState, useEffect } from 'react'
 function Listagem({ tipo, endpoint }) {
   const [dados, setDados] = useState([])
 
+  async function buscarDados() {
+    try {
+      const resposta = await fetch(`http://localhost:3000/${endpoint}`)
+      const resultado = await resposta.json()
+      setDados(resultado)
+    } catch (error) {
+      console.error("Erro ao buscar dados:", error)
+    }
+  }
   useEffect(() => {
-    // Faz a chamada para a sua API baseada no endpoint do Swagger
-    fetch(`http://localhost:3000/${endpoint}`)
-      .then(res => res.json())
-      .then(resultado => setDados(resultado))
-      .catch(err => console.error("Erro ao buscar dados:", error))
-  }, [endpoint])
+    buscarDados();
+  }, [endpoint]); // Reexecuta a busca sempre que o endpoint mudar
 
   // Identifica as colunas pegando as chaves do primeiro objeto retornado (ex: id_usuario, nome, email)
   const colunas = dados.length > 0 ? Object.keys(dados[0]) : []
