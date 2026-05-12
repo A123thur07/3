@@ -22,6 +22,11 @@ const documentacao = {
             get: {
                 tags: ["Usuários"],
                 summary: "Listar todos os usuários",
+                security: [
+                    {
+                        bearerAuth: []
+                    }
+                ],
                 responses: {
                     200: {
                         description: "Dados obtidos com sucesso!",
@@ -687,6 +692,14 @@ const documentacao = {
 
     },
     components: {
+        securitySchemes: {
+            bearerAuth: {
+                type: 'http',
+                scheme: 'bearer',
+                bearerFormat: 'JWT',
+                description: "Insira o token JWT obtido no login"
+            }
+        },
         schemas: {
             Listar_Usuarios: {
                 type: 'object',
@@ -831,7 +844,12 @@ const documentacao = {
             Resposta_Login: {
                 type: 'object',
                 properties: {
-                    message: { type: 'string', example: 'Login realizado com sucesso' },
+                    message: { 
+                        type: 'string', 
+                        example: 'Login realizado com sucesso' },
+                    token: { 
+                        type: 'string', 
+                        example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtZSI6IlJpY2FyZG8iLCJpYXQiOjE2ODg4ODQ4MDAsImV4cCI6MTY4ODg4NTcwMH0.abc123def456ghi789jkl012mno345pqr678stu901vwx234yz567' },
                     usuario: {
                         type: 'object',
                         properties: {

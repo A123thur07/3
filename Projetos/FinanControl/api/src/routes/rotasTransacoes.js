@@ -15,10 +15,12 @@ router.get('/transacoes', async (req, res) => {
         TO_CHAR(t.data_pagamento,'DD/MM/YYY') AS data_pagamento,
         t.tipo,
         c.nome AS nome_categoria,
-        s.nome AS nome_subcategoria
+        s.nome AS nome_subcategoria,
+        u.nome AS nome_usuario
         FROM transacoes t
         LEFT JOIN categorias c ON t.id_categoria = c.id_categoria
         LEFT JOIN subcategorias s ON t.id_subcategoria = s.id_subcategoria
+        LEFT JOIN usuarios u ON t.id_usuario = u.id_usuario
         `
 
         //cria uma variavel para receber o retorno do sql
