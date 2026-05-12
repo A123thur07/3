@@ -3,18 +3,21 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 // import NavBar from './components/NavBar'
 import Listagem from './pages/listagem' // Importe com letra maiúscula
 import Cadastro from './pages/cadastro'
+import NavBar from './components/NavBar'
 
 function App() {
   return (
-    <div>
+    <div className="body">
       <BrowserRouter>
         {/* <NavBar /> */}
         <main className='conteudo-principal'>
           <Routes>
             {/* Rotas de Listagem */}
-            <Route path="/listar_usuario" element={<Listagem tipo="Usuários"  endpoint="usuarios"/>} />
-            <Route path="/listar_servico" element={<Listagem tipo="Serviços"  endpoint="servicos"/>} />
-            <Route path="/listar_agendamento" element={<Listagem tipo="Agendamentos"  endpoint="agendamentos"/>} />
+            <NavBar />
+
+            <Route path="/listar_usuario" element={<Listagem tipo="Usuários" endpoint="usuarios" />} />
+            <Route path="/listar_servico" element={<Listagem tipo="Serviços" endpoint="servicos" />} />
+            <Route path="/listar_agendamento" element={<Listagem tipo="Agendamentos" endpoint="agendamentos" />} />
 
             {/* Rotas de Cadastro */}
             <Route path="/cadastrar_usuario" element={<Cadastro tipo="Usuário" />} />

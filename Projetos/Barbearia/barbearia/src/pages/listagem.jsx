@@ -29,7 +29,7 @@ function Listagem({ tipo, endpoint }) {
               {/* Gera os cabeçalhos das colunas dinamicamente */}
               {colunas.map(col => (
                 <th key={col} style={{ padding: '8px' }}>
-                  {col.replace('_', ' ').toUpperCase()}
+                  {col}
                 </th>
               ))}
               <th>Ações</th>
