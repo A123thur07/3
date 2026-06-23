@@ -7,8 +7,12 @@ const documentacao = {
     },
     servers: [
         {
-            url: 'http://localhost:3000',
+            url: 'http://localhost:3001',
             description: 'localhost'
+        },
+        {
+            url: 'https://api-arthurfsantos16-5215s-projects.vercel.app',
+            description: 'Vercel'
         }
     ],
     tags: [
@@ -44,6 +48,11 @@ const documentacao = {
             post: {
                 tags: ['Usuários'],
                 summary: 'Cadastrar novo usuário',
+                security: [
+                    {
+                        bearerAuth: []
+                    }
+                ],
                 description: "Recebe nome, email, senha para cadastrar novo usuário",
                 requestBody: {
                     required: true,
@@ -69,6 +78,11 @@ const documentacao = {
             put: {
                 tags: ['Usuários'],
                 summary: 'Atualizar todos os dados do usuário',
+                security: [
+                    {
+                        bearerAuth: []
+                    }
+                ],
                 description: 'Atualiza todos os dados de um usuário existente, é necessário enviar todos os campos',
                 parameters: [
                     {
@@ -117,6 +131,11 @@ const documentacao = {
             delete: {
                 tags: ['Usuários'],
                 summary: 'Remover Usuário',
+                security: [
+                    {
+                        bearerAuth: []
+                    }
+                ],
                 description: 'Remove usuário existente pelo ID',
                 parameters: [
                     {
@@ -155,6 +174,11 @@ const documentacao = {
             get: {
                 tags: ["Categorias"],
                 summary: "Listar todas as categorias",
+                security: [
+                    {
+                        bearerAuth: []
+                    }
+                ],
                 responses: {
                     200: {
                         description: "Dados obtidos com sucesso!",
@@ -172,6 +196,11 @@ const documentacao = {
             post: {
                 tags: ['Categorias'],
                 summary: 'Cadastrar nova categoria',
+                security: [
+                    {
+                        bearerAuth: []
+                    }
+                ],
                 description: "Recebe nome, descricao, cor, icone, tipo e ativo para cadastrar nova categoria",
                 requestBody: {
                     required: true,
@@ -197,6 +226,11 @@ const documentacao = {
             put: {
                 tags: ['Categorias'],
                 summary: 'Atualizar todos os dados da categoria',
+                security: [
+                    {
+                        bearerAuth: []
+                    }
+                ],
                 description: 'Atualiza todos os dados de uma categoria existente, é necessário enviar todos os campos',
                 parameters: [
                     {
@@ -248,6 +282,11 @@ const documentacao = {
             delete: {
                 tags: ['Categorias'],
                 summary: 'Remover Categoria',
+                security: [
+                    {
+                        bearerAuth: []
+                    }
+                ],
                 description: 'Remove categoria existente pelo ID',
                 parameters: [
                     {
@@ -285,6 +324,11 @@ const documentacao = {
             get: {
                 tags: ["Subcategorias"],
                 summary: "Listar todas as subcategorias",
+                security: [
+                    {
+                        bearerAuth: []
+                    }
+                ],
                 responses: {
                     200: {
                         description: "Dados obtidos com sucesso!",
@@ -302,6 +346,11 @@ const documentacao = {
             post: {
                 tags: ['Subcategorias'],
                 summary: 'Cadastrar nova subcategoria',
+                security: [
+                    {
+                        bearerAuth: []
+                    }
+                ],
                 description: "Recebe nome, ativo e id_categoria para cadastrar nova subcategoria",
                 requestBody: {
                     required: true,
@@ -327,6 +376,11 @@ const documentacao = {
             put: {
                 tags: ['Subcategorias'],
                 summary: 'Atualizar todos os dados da subcategoria',
+                security: [
+                    {
+                        bearerAuth: []
+                    }
+                ],
                 description: 'Atualiza todos os dados de uma subcategoria existente, é necessário enviar todos os campos',
                 parameters: [
                     {
@@ -375,6 +429,11 @@ const documentacao = {
             delete: {
                 tags: ['Subcategorias'],
                 summary: 'Remover Subcategoria',
+                security: [
+                    {
+                        bearerAuth: []
+                    }
+                ],
                 description: 'Remove subcategoria existente pelo ID',
                 parameters: [
                     {
@@ -412,6 +471,11 @@ const documentacao = {
             get: {
                 tags: ["Transações"],
                 summary: "Listar todas as transações",
+                security: [
+                    {
+                        bearerAuth: []
+                    }
+                ],
                 responses: {
                     200: {
                         description: "Dados obtidos com sucesso!",
@@ -429,6 +493,11 @@ const documentacao = {
             post: {
                 tags: ['Transações'],
                 summary: 'Cadastrar nova transação',
+                security: [
+                    {
+                        bearerAuth: []
+                    }
+                ],
                 description: "Recebe valor, descricao, data_vencimento, data_pagamento, tipo, id_subcategoria e id_categoria para cadastrar nova transação",
                 requestBody: {
                     required: true,
@@ -454,6 +523,11 @@ const documentacao = {
             put: {
                 tags: ['Transações'],
                 summary: 'Atualizar todos os dados da transação',
+                security: [
+                    {
+                        bearerAuth: []
+                    }
+                ],
                 description: 'Atualiza todos os dados de uma transação existente, é necessário enviar todos os campos',
                 parameters: [
                     {
@@ -506,6 +580,11 @@ const documentacao = {
             delete: {
                 tags: ['Transações'],
                 summary: 'Remover Transação',
+                security: [
+                    {
+                        bearerAuth: []
+                    }
+                ],
                 description: 'Remove transação existente pelo ID',
                 parameters: [
                     {
@@ -542,6 +621,11 @@ const documentacao = {
             get: {
                 tags: ["Transações"],
                 summary: "Listar transações por tipo",
+                security: [
+                    {
+                        bearerAuth: []
+                    }
+                ],
                 description: "Retorna uma lista de transações filtradas pelo tipo",
                 parameters: [
                     {
@@ -577,10 +661,45 @@ const documentacao = {
                 }
             }
         },
+        "/transacoes/periodo": {
+
+        },
+        "/transacoes/agendar": {
+            post: {
+                tags: ["Transações"],
+                summary: "Agendar compromisso unico",
+                description: "Esta rota verifica se o usuário possui um registro para a mesma",
+                security: [{ bearerAuth: [] }],
+                requestBody: {
+                    required: true,
+                    content: {
+                        "application/json": {
+                            schema: { $ref: "#/components/schemas/Agendar_Transacao" }
+                        }
+                    }
+                },
+                responses: {
+                    201: {
+                        description: "Transação agendada com sucesso"
+                    },
+                    409: {
+                        description: "Conflito ao agendar transação"
+                    },
+                    500: {
+                        description: "Erro interno no servidor"
+                    }
+                }
+            }
+        },
         "/transacoes/categoria/{id_categoria}": {
             get: {
                 tags: ["Transações"],
                 summary: "Listar transações por categoria",
+                security: [
+                    {
+                        bearerAuth: []
+                    }
+                ],
                 description: "Retorna uma lista de transações filtradas pela categoria",
                 parameters: [
                     {
@@ -619,6 +738,11 @@ const documentacao = {
             get: {
                 tags: ["Transações"],
                 summary: "Listar transações por subcategoria",
+                security: [
+                    {
+                        bearerAuth: []
+                    }
+                ],
                 description: "Retorna uma lista de transações filtradas pela subcategoria",
                 parameters: [
                     {
@@ -690,6 +814,76 @@ const documentacao = {
             }
         },
 
+        "/dashboard": {
+            get: {
+                tags: ["Dashboard"],
+                summary: "Obtém todos os dados consolidados do Dashboard",
+                security: [
+                    {
+                        bearerAuth: []
+                    }
+                ],
+                description: "Retorna o resumo do mês atual, gastos por categoria, maiores despesas",
+                responses: {
+                    200: {
+                        description: "Dados obtidos com sucesso!",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        resumoMesAtual: {
+                                            type: "object",
+                                            properties: {
+                                                entradas: { type: "number", example: 500 },
+                                                saidas: { type: "number", example: 259 },
+                                                saldo: { type: "number", example: 241 },
+                                            }
+                                        },
+                                        gastosCategorias: {
+                                            type: "object",
+                                            properties: {
+                                                nome: { type: "string", example: "Alimentação" },
+                                                total: { type: "number", example: 500 }
+                                            }
+                                        },
+                                        resumoMaioresGastos: {
+                                            type: "object",
+                                            properties: {
+                                                descricao: { type: "string", example: "Aluguel" },
+                                                valor: { type: "number", example: 1500.00 },
+                                                data: { type: "string", example: "10/052026" }
+                                            }
+                                        },
+                                        resumoUltimasTransacoes: {
+                                            type: "object",
+                                            properties: {
+                                                descricao: { type: "string", example: "Aluguel" },
+                                                valor: { type: "number", example: 1500.00 },
+                                                data: { type: "string", example: "10/052026" }
+                                            }
+                                        },
+                                        resumoEvolucao: {
+                                            type: "object",
+                                            properties: {
+                                                mes: { type: "string", example: "05/2025" },
+                                                entradas: { type: "number", example: 1500.00 },
+                                                saidas: { type: "string", example: 2000 }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    500: {
+                        description: "Erro interno no servidor"
+                    }
+                }
+            },
+        }
+
+
     },
     components: {
         securitySchemes: {
@@ -728,7 +922,6 @@ const documentacao = {
                     tipo_acesso: { type: "string", example: "admin" }
                 }
             },
-
             Listar_Categorias: {
                 type: 'object',
                 properties: {
@@ -764,7 +957,6 @@ const documentacao = {
                     ativo: { type: "boolean", example: true }
                 }
             },
-
             Listar_Subcategorias: {
                 type: 'object',
                 properties: {
@@ -791,7 +983,6 @@ const documentacao = {
                     id_categoria: { type: "integer", example: 1 }
                 }
             },
-
             Listar_Transacao: {
                 type: 'object',
                 properties: {
@@ -831,7 +1022,6 @@ const documentacao = {
                     id_categoria: { type: "integer", example: 1 }
                 }
             },
-
             Login_Usuario: {
                 type: 'object',
                 required: true,
@@ -844,12 +1034,14 @@ const documentacao = {
             Resposta_Login: {
                 type: 'object',
                 properties: {
-                    message: { 
-                        type: 'string', 
-                        example: 'Login realizado com sucesso' },
-                    token: { 
-                        type: 'string', 
-                        example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtZSI6IlJpY2FyZG8iLCJpYXQiOjE2ODg4ODQ4MDAsImV4cCI6MTY4ODg4NTcwMH0.abc123def456ghi789jkl012mno345pqr678stu901vwx234yz567' },
+                    message: {
+                        type: 'string',
+                        example: 'Login realizado com sucesso'
+                    },
+                    token: {
+                        type: 'string',
+                        example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtZSI6IlJpY2FyZG8iLCJpYXQiOjE2ODg4ODQ4MDAsImV4cCI6MTY4ODg4NTcwMH0.abc123def456ghi789jkl012mno345pqr678stu901vwx234yz567'
+                    },
                     usuario: {
                         type: 'object',
                         properties: {
@@ -858,7 +1050,21 @@ const documentacao = {
                         }
                     }
                 }
-            }
+            },
+            Agendar_Transacao: {
+                type: 'object',
+                required: true,
+                properties: {
+                    valor: { type: "numeric", example: 100.00 },
+                    descricao: { type: "string", example: "Compra de alimentos" },
+                    data_vencimento: { type: "string", example: "10/10/2023" },
+                    data_pagamento: { type: "string", example: "15/10/2023" },
+                    tipo: { type: "string", example: "E" },
+                    id_subcategoria: { type: "integer", example: 1 },
+                    id_categoria: { type: "integer", example: 1 }
+                }
+            },
+
         }
     }
 }

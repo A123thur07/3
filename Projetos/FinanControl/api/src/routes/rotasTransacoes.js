@@ -1,10 +1,11 @@
 import { Router } from "express";
 import { BD } from "../../db.js";
+import { autenticarToken } from "../middlewares/autenticacao.js";
 
 const router = Router();
 
 //Criando o endpoint para listar todos os usuarios
-router.get('/transacoes', async (req, res) => {
+router.get('/transacoes', autenticarToken, async (req, res) => {
     try {
         //cria uma variavel para enviar o comando sql
         const query = `SELECT t.id_transacao, 
@@ -36,7 +37,7 @@ router.get('/transacoes', async (req, res) => {
 })
 
 //Endpoint seguro contra sql Injection
-router.post('/transacoes', async (req, res) => {
+router.post('/transacoes', autenticarToken, async (req, res) => {
     const { valor, descricao, data_vencimento, data_pagamento, tipo, id_subcategoria, id_categoria } = req.body;
     try {
         const comando = `INSERT INTO TRANSACOES(valor, descricao, data_vencimento, data_pagamento, tipo, id_subcategoria, id_categoria) VALUES($1, $2, $3, $4, $5, $6, $7)`
@@ -54,7 +55,7 @@ router.post('/transacoes', async (req, res) => {
 
 // endpoint para atualizar um unico usuário
 // recebendo o parametro pelo id e buscando o usuario
-router.put('/transacoes/:id_transacao', async (req, res) => {
+router.put('/transacoes/:id_transacao', autenticarToken, async (req, res) => {
     // Id recebido via parametro
     const { id_transacao } = req.params;
 
@@ -81,7 +82,7 @@ router.put('/transacoes/:id_transacao', async (req, res) => {
 })
 
 //Rota patch atualizando parcialmente as informações
-router.patch('/transacoes/:id_transacao', async (req, res) => {
+router.patch('/transacoes/:id_transacao', autenticarToken, async (req, res) => {
     const { id_transacao } = req.params;
     const { valor, descricao, data_vencimento, data_pagamento, tipo, id_subcategoria, id_categoria } = req.body;
 
@@ -154,7 +155,7 @@ router.patch('/transacoes/:id_transacao', async (req, res) => {
     }
 })
 
-router.delete('/transacoes/:id_transacao', async (req, res) => {
+router.delete('/transacoes/:id_transacao', autenticarToken, async (req, res) => {
     const { id_transacao } = req.params;
     try {
         //Executa o comando de delete
@@ -167,7 +168,7 @@ router.delete('/transacoes/:id_transacao', async (req, res) => {
     }
 })
 
-router.get('/transacoes/tipo/:tipo', async (req, res) => {
+router.get('/transacoes/tipo/:tipo', autenticarToken, async (req, res) => {
     const { tipo } = req.params;
 
     try {
@@ -198,7 +199,7 @@ router.get('/transacoes/tipo/:tipo', async (req, res) => {
         return res.status(500).json({ message: "Erro interno so servidor" + error.message })
     }
 })
-router.get('/transacoes/categoria/:id_categoria', async (req, res) => {
+router.get('/transacoes/categoria/:id_categoria', autenticarToken, async (req, res) => {
     const { id_categoria } = req.params;
 
     try {
@@ -225,7 +226,8 @@ router.get('/transacoes/categoria/:id_categoria', async (req, res) => {
         return res.status(500).json({ message: "Erro interno so servidor" + error.message })
     }
 })
-router.get('/transacoes/subcategoria/:id_subcategoria', async (req, res) => {
+
+router.get('/transacoes/subcategoria/:id_subcategoria', autenticarToken, async (req, res) => {
     const { id_subcategoria } = req.params;
     try {
         const query = `SELECT t.id_transacao, 
@@ -251,6 +253,32 @@ router.get('/transacoes/subcategoria/:id_subcategoria', async (req, res) => {
         return res.status(500).json({ message: "Erro interno so servidor" + error.message })
     }
 })
+
+router.post('/transacoes/agendar', autenticarToken, async (req, res) => {
+    const { valor, descricao, data_vencimento, data_pagamento, tipo, id_subcategoria, id_categoria } = req.body;
+    const id_usuario = req.usuario.id_usuario; // Obtém o ID do usuário autenticado
+    try {
+        const consulta = `SELECT * FROM TRANSACOES 
+        WHERE id_usuario = $1       
+        AND data_vencimento = TO_DATE($2, 'DD/MM/YYYY') 
+        AND id_categoria = $3`
+        const conflito = await BD.query(consulta, [id_usuario, data_vencimento, id_categoria]);
+
+        if (conflito.rows.length > 0) {
+            return res.status(409).json({ message: "Conflito: Já existe uma transação agendada para esta data e categoria" })
+        }
+
+        const comando = `INSERT INTO TRANSACOES(valor, descricao, data_vencimento, data_pagamento, tipo, id_subcategoria, id_categoria, id_usuario) 
+        VALUES($1, $2, $3, TO_DATE($4, 'DD/MM/YYYY'), $5, $6, $7, $8)`
+
+        const valores = [valor, descricao, data_vencimento, data_pagamento, tipo, id_subcategoria, id_categoria, id_usuario];
+        await BD.query(comando, valores);
+        return res.status(201).json({ message: "Transação agendada com sucesso" });
+    } catch (error) {
+        console.error('Erro ao agendar transação', error.message);
+        return res.status(500).json({ message: "Erro interno do servidor" + error.message })
+    }
+});
 
 
 export default router

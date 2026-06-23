@@ -1,11 +1,12 @@
 import { Router } from "express";
 import { BD } from "../../db.js";
 import bcrypt from 'bcrypt';
+import { autenticarToken } from "../middlewares/autenticacao.js";
 
 const router = Router();
 
 //Criando o endpoint para listar todos os usuarios
-router.get('/subcategorias', async(req, res) =>{
+router.get('/subcategorias', autenticarToken, async(req, res) =>{
     try{
         //cria uma variavel para enviar o comando sql
         const query = `SELECT * FROM subcategorias ORDER BY id_subcategoria`
@@ -23,7 +24,7 @@ router.get('/subcategorias', async(req, res) =>{
 })
 
 //Endpoint seguro contra sql Injection
-router.post('/subcategorias', async(req, res) => {
+router.post('/subcategorias', autenticarToken, async(req, res) => {
     const {nome, ativo, id_categoria} = req.body;
     try{
         const comando = `INSERT INTO SUBCATEGORIAS(nome, ativo, id_categoria) VALUES($1, $2, $3)`
@@ -41,7 +42,7 @@ router.post('/subcategorias', async(req, res) => {
 
 // endpoint para atualizar um unico usuário
 // recebendo o parametro pelo id e buscando o usuario
-router.put('/subcategorias/:id_subcategoria', async(req, res) =>{
+router.put('/subcategorias/:id_subcategoria', autenticarToken, async(req, res) =>{
     // Id recebido via parametro
     const {id_subcategoria} = req.params;
 
@@ -68,7 +69,7 @@ router.put('/subcategorias/:id_subcategoria', async(req, res) =>{
 })
 
 //Rota patch atualizando parcialmente as informações
-router.patch('/subcategorias/:id_subcategoria', async(req,res) =>{
+router.patch('/subcategorias/:id_subcategoria', autenticarToken, async(req,res) =>{
     const { id_subcategoria } = req.params;
     const {nome, ativo, id_categoria} = req.body;
 
@@ -121,7 +122,7 @@ router.patch('/subcategorias/:id_subcategoria', async(req,res) =>{
     }
 })
 
-router.delete('/subcategorias/:id_subcategoria', async(req, res) =>{
+router.delete('/subcategorias/:id_subcategoria', autenticarToken, async(req, res) =>{
     const {id_subcategoria} = req.params;
     try{
         //Executa o comando de delete

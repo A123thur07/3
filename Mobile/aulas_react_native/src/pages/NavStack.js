@@ -5,6 +5,8 @@ import Home from "./Home";
 import Cadastro from "./Cadastro";
 import Relatorio from "./Relatorio";
 import Grafico from "./Grafico";
+import Login from "./Login"
+import NavDrawer from "./NavDrawer";
 
 //criando uma constante que cria o estilo de navegação Stack
 const Stack = createNativeStackNavigator();
@@ -12,11 +14,18 @@ const Stack = createNativeStackNavigator();
 const NavStack = () => {
     return (
         <NavigationContainer>
-            <Stack.Navigator >
+            <Stack.Navigator initialRouteName="Login">
                 {/* Aqui definimos as telas, e o nome que queremos dar a elas */}
                 {/* Em name definimos como ela vai ser chamada */}
                 {/* Em component definimos qual tela vai ser renderizada */}
+
                 <Stack.Screen name="Home" component={Home} />
+                <Stack.Screen name="Login" component={Login} />
+                <Stack.Screen name="MenuPrincipal" component={NavDrawer} 
+                    options={{
+                        headerShown: false
+                    }}
+                />
                 <Stack.Screen name="Cadastro" component={Cadastro} />
                 <Stack.Screen name="Relatorio" component={Relatorio}
                     options={{

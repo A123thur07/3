@@ -1,10 +1,11 @@
 import { Router } from "express";
 import { BD } from "../../db.js";
+import {autenticarToken} from "../middlewares/autenticacao.js";
 
 const router = Router();
 
 //Criando o endpoint para listar todos os usuarios
-router.get('/categorias', async(req, res) =>{
+router.get('/categorias', autenticarToken, async(req, res) =>{
     try{
         //cria uma variavel para enviar o comando sql
         const query = `SELECT * FROM categorias ORDER BY id_categoria`
@@ -22,7 +23,7 @@ router.get('/categorias', async(req, res) =>{
 })
 
 //Endpoint seguro contra sql Injection
-router.post('/categorias', async(req, res) => {
+router.post('/categorias', autenticarToken, async(req, res) => {
     const {nome, descricao, cor, icone, tipo, ativo} = req.body;
     try{
         const comando = `INSERT INTO CATEGORIAS(nome, descricao, cor, icone, tipo, ativo) VALUES($1, $2, $3, $4, $5, $6)`
@@ -40,7 +41,7 @@ router.post('/categorias', async(req, res) => {
 
 // endpoint para atualizar um unico usuário
 // recebendo o parametro pelo id e buscando o usuario
-router.put('/categorias/:id_categoria', async(req, res) =>{
+router.put('/categorias/:id_categoria', autenticarToken, async(req, res) =>{
     // Id recebido via parametro
     const {id_categoria} = req.params;
 
@@ -67,7 +68,7 @@ router.put('/categorias/:id_categoria', async(req, res) =>{
 })
 
 //Rota patch atualizando parcialmente as informações
-router.patch('/categorias/:id_categoria', async(req,res) =>{
+router.patch('/categorias/:id_categoria', autenticarToken, async(req,res) =>{
     const { id_categoria } = req.params;
     const {nome, descricao, cor, icone, tipo, ativo} = req.body;
 
@@ -135,7 +136,7 @@ router.patch('/categorias/:id_categoria', async(req,res) =>{
     }
 })
 
-router.delete('/categorias/:id_categoria', async(req, res) =>{
+router.delete('/categorias/:id_categoria', autenticarToken, async(req, res) =>{
     const {id_categoria} = req.params;
     try{
         //Executa o comando de delete

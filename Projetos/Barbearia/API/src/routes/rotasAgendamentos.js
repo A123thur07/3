@@ -1,10 +1,11 @@
 import { Router } from "express";
 import { BD } from "../../db.js";
+import { autenticarToken } from "../middlewares/autenticacao.js";
 
 const router = Router();
 
 //Criando o endpoint para listar todos os usuarios
-router.get('/agendamentos', async (req, res) => {
+router.get('/agendamentos', autenticarToken, async (req, res) => {
     try {
         //cria uma variavel para enviar o comando sql
         const query = `SELECT a.id_agendamento, 
@@ -30,7 +31,7 @@ router.get('/agendamentos', async (req, res) => {
 })
 
 //Endpoint seguro contra sql Injection
-router.post('/agendamentos', async (req, res) => {
+router.post('/agendamentos', autenticarToken, async (req, res) => {
     const { id_cliente, id_servico, data_hora, status } = req.body;
     try {
         const comando = `INSERT INTO AGENDAMENTOS(id_cliente, id_servico, data_hora, status) VALUES($1, $2, $3, $4)`
@@ -48,7 +49,7 @@ router.post('/agendamentos', async (req, res) => {
 
 // endpoint para atualizar um unico usuário
 // recebendo o parametro pelo id e buscando o usuario
-router.put('/agendamentos/:id_agendamento', async (req, res) => {
+router.put('/agendamentos/:id_agendamento', autenticarToken, async (req, res) => {
     // Id recebido via parametro
     const { id_agendamento } = req.params;
 
@@ -75,7 +76,7 @@ router.put('/agendamentos/:id_agendamento', async (req, res) => {
 })
 
 
-router.delete('/agendamentos/:id_agendamento', async (req, res) => {
+router.delete('/agendamentos/:id_agendamento', autenticarToken, async (req, res) => {
     const { id_agendamento } = req.params;
     try {
         //Executa o comando de delete

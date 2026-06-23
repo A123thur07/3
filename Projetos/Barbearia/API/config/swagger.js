@@ -1,14 +1,18 @@
 const documentacao = {
     openapi: '3.0.3',
     info: {
-        title: 'API FinanControl',
-        description: 'Documentação da API do sistema FinanControl',
+        title: 'API Barbearia',
+        description: 'Documentação da API do sistema Barbearia, que gerencia usuários, serviços e agendamentos.',
         version: '1.0.0'
     },
     servers: [
         {
             url: 'http://localhost:3000',
             description: 'localhost'
+        },
+        {
+            url: 'https://api-arthurfsantos16-5215s-projects.vercel.app',
+            description: 'Vercel'
         }
     ],
     tags: [
@@ -21,6 +25,11 @@ const documentacao = {
             get: {
                 tags: ["Usuários"],
                 summary: "Listar todos os usuários",
+                security: [
+                    {
+                        bearerAuth: []
+                    }
+                ],
                 responses: {
                     200: {
                         description: "Dados obtidos com sucesso!",
@@ -38,6 +47,11 @@ const documentacao = {
             post: {
                 tags: ['Usuários'],
                 summary: 'Cadastrar novo usuário',
+                security: [
+                    {
+                        bearerAuth: []
+                    }
+                ],
                 description: "Recebe nome, email, senha para cadastrar novo usuário",
                 requestBody: {
                     required: true,
@@ -63,6 +77,11 @@ const documentacao = {
             put: {
                 tags: ['Usuários'],
                 summary: 'Atualizar todos os dados do usuário',
+                security: [
+                    {
+                        bearerAuth: []
+                    }
+                ],
                 description: 'Atualiza todos os dados de um usuário existente, é necessário enviar todos os campos',
                 parameters: [
                     {
@@ -112,6 +131,11 @@ const documentacao = {
             delete: {
                 tags: ['Usuários'],
                 summary: 'Remover Usuário',
+                security: [
+                    {
+                        bearerAuth: []
+                    }
+                ],
                 description: 'Remove usuário existente pelo ID',
                 parameters: [
                     {
@@ -150,6 +174,11 @@ const documentacao = {
             get: {
                 tags: ["Serviços"],
                 summary: "Listar todos os serviços",
+                security: [
+                    {
+                        bearerAuth: []
+                    }
+                ],
                 responses: {
                     200: {
                         description: "Dados obtidos com sucesso!",
@@ -167,6 +196,11 @@ const documentacao = {
             post: {
                 tags: ['Serviços'],
                 summary: 'Cadastrar novo serviço',
+                security: [
+                    {
+                        bearerAuth: []
+                    }
+                ],
                 description: "Recebe nome, preço e descricao para cadastrar novo serviço",
                 requestBody: {
                     required: true,
@@ -192,6 +226,11 @@ const documentacao = {
             put: {
                 tags: ['Serviços'],
                 summary: 'Atualizar todos os dados do serviço',
+                security: [
+                    {
+                        bearerAuth: []
+                    }
+                ],
                 description: 'Atualiza todos os dados de um serviço existente, é necessário enviar todos os campos',
                 parameters: [
                     {
@@ -240,6 +279,11 @@ const documentacao = {
             delete: {
                 tags: ['Serviços'],
                 summary: 'Remover Serviço',
+                security: [
+                    {
+                        bearerAuth: []
+                    }
+                ],
                 description: 'Remove serviço existente pelo ID',
                 parameters: [
                     {
@@ -273,11 +317,15 @@ const documentacao = {
             },
         },
 
-
         "/agendamentos": {
             get: {
                 tags: ["Agendamentos"],
                 summary: "Listar todos os agendamentos",
+                security: [
+                    {
+                        bearerAuth: []
+                    }
+                ],
                 responses: {
                     200: {
                         description: "Dados obtidos com sucesso!",
@@ -285,7 +333,7 @@ const documentacao = {
                             "application/json": {
                                 schema: {
                                     type: "array",
-                                    items: { $ref: '#/components/schemas/Listar_Agendamento' }
+                                    items: { $ref: '#/components/schemas/Listar_Agendamentos' }
                                 }
                             }
                         }
@@ -295,6 +343,11 @@ const documentacao = {
             post: {
                 tags: ['Agendamentos'],
                 summary: 'Cadastrar novo agendamento',
+                security: [
+                    {
+                        bearerAuth: []
+                    }
+                ],
                 description: "Recebe data_hora, id_cliente, id_servico e id_barbeiro para cadastrar novo agendamento",
                 requestBody: {
                     required: true,
@@ -320,6 +373,11 @@ const documentacao = {
             put: {
                 tags: ['Agendamentos'],
                 summary: 'Atualizar todos os dados do agendamento',
+                security: [
+                    {
+                        bearerAuth: []
+                    }
+                ],
                 description: 'Atualiza todos os dados de um agendamento existente, é necessário enviar todos os campos',
                 parameters: [
                     {
@@ -369,6 +427,11 @@ const documentacao = {
             delete: {
                 tags: ['Agendamentos'],
                 summary: 'Remover Agendamento',
+                security: [
+                    {
+                        bearerAuth: []
+                    }
+                ],
                 description: 'Remove agendamento existente pelo ID',
                 parameters: [
                     {
@@ -402,9 +465,112 @@ const documentacao = {
             },
         },
 
+        "/login": {
+            post: {
+                tags: ['Autenticação'],
+                summary: 'Realizar Login',
+                description: "Autentica um usuario e retorna id e nome",
+                requestBody: {
+                    required: true,
+                    content: {
+                        "application/json": {
+                            schema: {
+                                $ref: "#/components/schemas/Login_Usuario"
+                            }
+                        }
+                    }
+                },
+                responses: {
+                    200: {
+                        description: "Login realizado com sucesso!",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    $ref: "#/components/schemas/Resposta_Login"
+                                }
+                            }
+                        }
+                    },
+                    400: { description: "Email e senha são obrigatorios" },
+                    401: { description: "Credenciais inválidas" },
+                    500: {
+                        description: "Erro interno no servidor"
+                    }
+                }
+            }
+        },
+
+        "/dashboard": {
+            get: {
+                security: [
+                    {
+                        bearerAuth: []
+                    }
+                ],
+                tags: ["Dashboard"],
+                summary: "Obtém todos os dados consolidados do Dashboard",
+                description: "Retorna o resumo do mês atual, gastos por serviços e maiores despesas",
+                responses: {
+                    200: {
+                        description: "Dados obtidos com sucesso!",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        resumoMes: {
+                                            type: "object",
+                                            properties: {
+                                                confirmados: { type: "number", example: 500 },
+                                                cancelados: { type: "number", example: 259 },
+                                                saldo: { type: "number", example: 241 },
+                                            }
+                                        },
+                                        ServicosMaisProcurados: {
+                                            type: "object",
+                                            properties: {
+                                                nome: { type: "string", example: "Corte de Cabelo" },
+                                                total: { type: "number", example: 500 }
+                                            }
+                                        },
+                                        ClientesFieis: {
+                                            type: "object",
+                                            properties: {
+                                                nome: { type: "string", example: "Ricardo" },
+                                                frequencia: { type: "number", example: 10 } 
+                                            }
+                                        },
+                                        ProximosAgendamentos: {
+                                            type: "object",
+                                            properties: {
+                                                data_hora: { type: "string", example: "2023-12-01 14:00:00" },
+                                                nome_cliente: { type: "string", example: "Ricardo" },
+                                                nome_servico: { type: "string", example: "Corte de Cabelo" }
+                                            }
+                                        },
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    500: {
+                        description: "Erro interno no servidor"
+                    }
+                }
+            },
+        }
+
 
     },
     components: {
+        securitySchemes: {
+            bearerAuth: {
+                type: 'http',
+                scheme: 'bearer',
+                bearerFormat: 'JWT',
+                description: "Insira o token JWT obtido no login"
+            }
+        },
         schemas: {
             Listar_Usuarios: {
                 type: 'object',
@@ -434,6 +600,7 @@ const documentacao = {
                 }
             },
 
+            
             Listar_Servicos: {
                 type: 'object',
                 properties: {
@@ -460,6 +627,7 @@ const documentacao = {
                     preco: { type: "number", example: 50.00 }
                 }
             },
+
 
             Listar_Agendamentos: {
                 type: 'object',
@@ -490,6 +658,35 @@ const documentacao = {
                     status: { type: "string", example: "cancelado" }
 
 
+                }
+            },
+            Login_Usuario: {
+                type: 'object',
+                required: true,
+                properties: {
+                    nome: { type: "string", example: "Ricardo" },
+                    email: { type: "string", example: "ricardo2@email.com" },
+                    senha: { type: "string", example: "Senha123" }
+                }
+            },
+            Resposta_Login: {
+                type: 'object',
+                properties: {
+                    message: {
+                        type: 'string',
+                        example: 'Login realizado com sucesso'
+                    },
+                    token: {
+                        type: 'string',
+                        example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtZSI6IlJpY2FyZG8iLCJpYXQiOjE2ODg4ODQ4MDAsImV4cCI6MTY4ODg4NTcwMH0.abc123def456ghi789jkl012mno345pqr678stu901vwx234yz567'
+                    },
+                    usuario: {
+                        type: 'object',
+                        properties: {
+                            id_usuario: { type: "string", example: 1 },
+                            nome: { type: "string", example: "Ricardo" },
+                        }
+                    }
                 }
             },
         }

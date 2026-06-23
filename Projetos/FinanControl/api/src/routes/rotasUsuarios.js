@@ -27,7 +27,7 @@ router.get('/usuarios', autenticarToken, async (req, res) => {
 })
 
 //Endpoint seguro contra sql Injection
-router.post('/usuarios', async (req, res) => {
+router.post('/usuarios', autenticarToken, async (req, res) => {
     const { nome, email, senha, tipo_acesso } = req.body;
     try {
         //definindo a força da criptografia
@@ -50,7 +50,7 @@ router.post('/usuarios', async (req, res) => {
 
 // endpoint para atualizar um unico usuário
 // recebendo o parametro pelo id e buscando o usuario
-router.put('/usuarios/:id_usuario', async (req, res) => {
+router.put('/usuarios/:id_usuario', autenticarToken, async (req, res) => {
     // Id recebido via parametro
     const { id_usuario } = req.params;
 
@@ -77,7 +77,7 @@ router.put('/usuarios/:id_usuario', async (req, res) => {
 })
 
 //Rota patch atualizando parcialmente as informações
-router.patch('/usuarios/:id_usuario', async (req, res) => {
+router.patch('/usuarios/:id_usuario', autenticarToken, async (req, res) => {
     const { id_usuario } = req.params;
     const { nome, email, senha, tipo_acesso } = req.body;
 
@@ -135,7 +135,7 @@ router.patch('/usuarios/:id_usuario', async (req, res) => {
     }
 })
 
-router.delete('/usuarios/:id_usuario', async (req, res) => {
+router.delete('/usuarios/:id_usuario', autenticarToken, async (req, res) => {
     const { id_usuario } = req.params;
     try {
         //Executa o comando de delete
@@ -173,7 +173,8 @@ router.post('/login', async (req, res) => {
             message: 'Login realizado',
             usuario: {
                 id_usuario: usuario.id_usuario,
-                nome: usuario.nome
+                nome: usuario.nome, 
+                email: usuario.email
             },
             token: token
         })
